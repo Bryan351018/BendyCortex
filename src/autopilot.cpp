@@ -1,0 +1,7 @@
+namespace bendy
+{
+    void autopilot()
+    {
+
+    }
+}
