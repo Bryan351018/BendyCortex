@@ -2,3 +2,4 @@ compile_commands.json
 makefile
 vex/
 build/
+.DS_Store
