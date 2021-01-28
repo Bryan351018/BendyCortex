@@ -1,7 +1,0 @@
-namespace bendy
-{
-    void autopilot()
-    {
-
-    }
-}

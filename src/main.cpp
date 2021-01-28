@@ -1,7 +1,13 @@
 #include <v5.h>
 #include <v5_vcs.h>
+
+#ifndef AUTOPILOT_H
 #include "autopilot.h"
+#endif
+
+#ifndef DRIVER_H
 #include "driver.h"
+#endif
 
 using namespace vex;
 
@@ -14,6 +20,6 @@ int main ()
     controller().rumble("..");
 
     // Bind competition callback functions
-    RaceObj.autonomous(bendy::autopilot);
-    RaceObj.drivercontrol(bendy::driver);
+    RaceObj.autonomous(autopilot);
+    RaceObj.drivercontrol(driver);
 }
