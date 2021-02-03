@@ -1,6 +1,7 @@
-#define AUTOPILOT_H 1
-
-void autopilot()
+namespace bendy
 {
+    void autopilot()
+    {
 
-}
+    }
+};
