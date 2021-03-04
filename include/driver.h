@@ -19,13 +19,13 @@ namespace bendy
         R2: eject ball
     */
 
-    void motor_update () // Update the motor velocities
+    void base_update () // Update the base motor velocities
     {
-        double v = vertical.value() / 127;
-        double h = horizontal.value() / 127;
+        double h = horizontal.value() / 127.0;
+        double v = vertical.value() / 127.0;
 
         bendy::MotorMetadata data;
-        data = bendy::left_single_stick(v, h);
+        data = bendy::left_single_stick(h, v);
 
         bendy::Wheel_TL.setVelocity(data.TopLeft * 100, vex::pct);
         bendy::Wheel_TR.setVelocity(data.TopRight * 100, vex::pct);
@@ -35,17 +35,37 @@ namespace bendy
 
     void driver () // The main function
     {
-        vertical.changed(motor_update);
-        horizontal.changed(motor_update);
+        vertical.changed(base_update);
+        horizontal.changed(base_update);
 
         bendy::Wheel_TL.spin(vex::fwd);
         bendy::Wheel_TR.spin(vex::fwd);
         bendy::Wheel_BL.spin(vex::fwd);
         bendy::Wheel_BR.spin(vex::fwd);
+        bendy::Vortex_Left.spin(vex::fwd);
+        bendy::Vortex_Right.spin(vex::fwd);
+        bendy::Roller_Top.spin(vex::fwd);
+        bendy::Roller_Bottom.spin(vex::fwd);
 
         while (true) // Infinite loop
         {
+            // Update motors that are not part of the base
+            if (Controller.ButtonL1.pressing())
+            {
 
+            }
+            if (Controller.ButtonL2.pressing())
+            {
+
+            }
+            if (Controller.ButtonR1.pressing())
+            {
+
+            }
+            if (Controller.ButtonR2.pressing())
+            {
+
+            }
 
             vex::task::sleep(20); // Good to have in infinite loops
         }
