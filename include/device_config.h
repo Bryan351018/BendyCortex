@@ -11,8 +11,8 @@ namespace bendy
     motor Wheel_TR      = motor(PORT14, ratio18_1, true);  // Top Right
     motor Wheel_BL      = motor(PORT2, ratio18_1, false);  // Bottom Left
     motor Wheel_BR      = motor(PORT3, ratio18_1, true);  // Bottom Right
-    motor Vortex_Left   = motor(PORT11, ratio18_1, false);
+    motor Vortex_Left   = motor(PORT11, ratio18_1, true);
     motor Vortex_Right  = motor(PORT17, ratio18_1, false);
-    motor Roller_Bottom = motor(PORT7, ratio18_1, false);
+    motor Roller_Bottom = motor(PORT7, ratio18_1, true);
     motor Roller_Top    = motor(PORT8, ratio18_1, false);
 };

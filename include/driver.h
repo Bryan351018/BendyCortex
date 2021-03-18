@@ -52,19 +52,37 @@ namespace bendy
             // Update motors that are not part of the base
             if (Controller.ButtonL1.pressing())
             {
-
+                bendy::Vortex_Left.setVelocity(100, vex::pct);
+                bendy::Vortex_Right.setVelocity(100, vex::pct);
+                bendy::Roller_Bottom.setVelocity(100, vex::pct);
             }
-            if (Controller.ButtonL2.pressing())
+            else if (Controller.ButtonL2.pressing())
             {
-
+                bendy::Vortex_Left.setVelocity(-100, vex::pct);
+                bendy::Vortex_Right.setVelocity(-100, vex::pct);
+                bendy::Roller_Bottom.setVelocity(-100, vex::pct);
             }
+            else
+            {
+                bendy::Vortex_Left.setVelocity(0, vex::pct);
+                bendy::Vortex_Right.setVelocity(0, vex::pct);
+                bendy::Roller_Bottom.setVelocity(0, vex::pct);
+            }
+
             if (Controller.ButtonR1.pressing())
             {
-
+                bendy::Roller_Top.setVelocity(100, vex::pct);
+                bendy::Roller_Bottom.setVelocity(100, vex::pct);
             }
-            if (Controller.ButtonR2.pressing())
+            else if (Controller.ButtonR2.pressing())
             {
-
+                bendy::Roller_Top.setVelocity(-100, vex::pct);
+                bendy::Roller_Bottom.setVelocity(-100, vex::pct);
+            }
+            else
+            {
+                bendy::Roller_Top.setVelocity(0, vex::pct);
+                // bendy::Roller_Bottom.setVelocity(0, vex::pct);
             }
 
             vex::task::sleep(20); // Good to have in infinite loops

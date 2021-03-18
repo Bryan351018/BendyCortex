@@ -11,10 +11,10 @@ namespace bendy
     struct MotorMetadata
     {
         public:
-            double TopLeft = 0;
-            double TopRight = 0;
-            double BottomLeft = 0;
-            double BottomRight = 0;
+            double TopLeft = 0.0;
+            double TopRight = 0.0;
+            double BottomLeft = 0.0;
+            double BottomRight = 0.0;
 
             MotorMetadata(){}
 
@@ -39,11 +39,21 @@ namespace bendy
         return (current - p_min) * ((c_max - c_min) / (p_max - p_min)) + c_min;
     }
 
+    // Snap the value fixed if it is too small
+    double clip (double input, double prec)
+    {
+        if (inRange(-prec, prec, input))
+            return prec;
+        else
+            return input;
+    }
+
     // A normal cubic function, as an input-smoothing alternative
     #define cubic(x) x*x*x
 
     // Left Single Stick: Team's preferred adapter.
     // Both horizontal and vertical are from -1 to 1.
+    /*
     MotorMetadata left_single_stick (double horizontal, double vertical)
     {
         // Smooth out inputs
@@ -53,29 +63,73 @@ namespace bendy
 
         if (inRange(-EPS, EPS, horizontal)) // Straight
         {
-            result.TopLeft = vertical;
-            result.TopRight = vertical;
-            result.BottomLeft = vertical;
-            result.BottomRight = vertical;
+            result.TopLeft = clip(vertical, EPS);
+            result.TopRight = clip(vertical, EPS);
+            result.BottomLeft = clip(vertical, EPS);
+            result.BottomRight = clip(vertical, EPS);
         }
         else if (horizontal < 0.0) // Rotating Left
         {
-            result.TopRight = vertical;
-            result.BottomRight = vertical;
+            result.TopRight = clip(vertical, EPS);
+            result.BottomRight = clip(vertical, EPS);
 
-            result.TopLeft = map(-1.0, 0.0, -vertical, 0.0, horizontal);
-            result.BottomLeft = map(-1.0, 0.0, -vertical, 0.0, horizontal);
+            result.TopLeft = clip(map(-1.0, 0.0, -vertical, 0.0, horizontal), EPS);
+            result.BottomLeft = clip(map(-1.0, 0.0, -vertical, 0.0, horizontal), EPS);
         }
         else if (horizontal > 0.0) // Rotating Right
         {
-            result.TopLeft = vertical;
-            result.BottomLeft = vertical;
+            result.TopLeft = clip(vertical, EPS);
+            result.BottomLeft = clip(vertical, EPS);
 
-            result.TopRight = map(0.0, 1.0, 0.0, vertical, horizontal);
-            result.BottomRight = map(0.0, 1.0, 0.0, vertical, horizontal);
+            result.TopRight = clip(map(0.0, 1.0, 0.0, vertical, horizontal), EPS);
+            result.BottomRight = clip(map(0.0, 1.0, 0.0, vertical, horizontal), EPS);
         }
-        else{}
+        else
+        {
+            result.TopLeft = 0.0;
+            result.BottomLeft = 0.0;
+
+            result.TopRight = 0.0;
+            result.BottomRight = 0.0;
+        }
 
         return result;
     }
+    */
+    MotorMetadata left_single_stick (double horizontal, double vertical)
+    {
+        // Smooth out inputs
+        horizontal = cubic(horizontal);
+        vertical = cubic(vertical);
+
+        MotorMetadata result = MotorMetadata(); // Create metadata
+
+        // Decide the turning mode (straight, left or right)
+        if (horizontal < -EPS) // Driving left
+        {
+            result.TopRight = fabs(horizontal);
+            result.BottomRight = fabs(horizontal);
+
+            result.TopLeft = vertical;
+            result.BottomLeft = vertical;
+        }
+        else if (horizontal > EPS) // Driving right
+        {
+            result.TopLeft = horizontal;
+            result.BottomLeft = horizontal;
+
+            result.TopRight = vertical;
+            result.BottomRight = vertical;
+        }
+        else // Driving straight
+        {
+            result.TopLeft = vertical;
+            result.BottomLeft = vertical;
+            result.TopRight = vertical;
+            result.BottomRight = vertical;
+        }
+
+        return result;
+    }
+
 };
