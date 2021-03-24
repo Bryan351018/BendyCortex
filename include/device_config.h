@@ -3,8 +3,12 @@
 
 using namespace vex;
 
+#ifndef MOTORS
+
 namespace bendy
 {
+    #define MOTORS
+
     // Motor objects
     // motor(PORT, Gear Unit Setting, Is Reversed)
     motor Wheel_TL      = motor(PORT1, ratio18_1, false);  // Top Left
@@ -16,3 +20,5 @@ namespace bendy
     motor Roller_Bottom = motor(PORT7, ratio18_1, true);
     motor Roller_Top    = motor(PORT8, ratio18_1, false);
 };
+
+#endif
