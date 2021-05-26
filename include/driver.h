@@ -8,8 +8,11 @@ namespace bendy
     vex::controller Controller = vex::controller();
 
     // Raw axes input
-    vex::controller::axis vertical = Controller.Axis3;
+    vex::controller::axis left_vertical = Controller.Axis3;
+    vex::controller::axis right_vertical = Controller.Axis2;
     vex::controller::axis horizontal = Controller.Axis4;
+
+    bool isTankDrive;
 
     /*
         About other preferred keybinds
@@ -21,11 +24,19 @@ namespace bendy
 
     void base_update () // Update the base motor velocities
     {
+        // VERY IMPORTANT: LOCATION OF THE DRIVING ADAPTER
+
         double h = horizontal.value() / 127.0;
-        double v = vertical.value() / 127.0;
+        double lv = left_vertical.value() / 127.0;
+        double rv = right_vertical.value() / 127.0;
 
         bendy::MotorMetadata data;
-        data = bendy::left_single_stick(h, v);
+
+        // VERY IMPORTANT: CONDITIONAL DRIVING ADAPTERS
+        if (isTankDrive)
+            data = bendy::tank(lv, rv);
+        else
+            data = bendy::left_single_stick(h, lv);
 
         bendy::Wheel_TL.setVelocity(data.TopLeft * 100, vex::pct);
         bendy::Wheel_TR.setVelocity(data.TopRight * 100, vex::pct);
@@ -33,9 +44,12 @@ namespace bendy
         bendy::Wheel_BR.setVelocity(data.BottomRight * 100, vex::pct);
     }
 
-    void driver () // The main function
+    void driver (bool tank) // The main function
     {
-        vertical.changed(base_update);
+        isTankDrive = tank;
+
+        left_vertical.changed(base_update);
+        right_vertical.changed(base_update);
         horizontal.changed(base_update);
 
         bendy::Wheel_TL.spin(vex::fwd);

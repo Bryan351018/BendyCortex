@@ -132,4 +132,33 @@ namespace bendy
         return result;
     }
 
+    // Smoothed tank drive function
+    MotorMetadata tank (double left, double right)
+    {
+        MotorMetadata result = MotorMetadata();
+        if (fabs(left) < EPS)
+        {
+            result.TopLeft = 0;
+            result.BottomLeft = 0;
+        }
+        else
+        {
+            result.TopLeft = left;
+            result.BottomLeft = left;
+        }
+
+        if (fabs(right) < EPS)
+        {
+            result.TopRight = 0;
+            result.BottomRight = 0;
+        }
+        else
+        {
+            result.TopRight = right;
+            result.BottomRight = right;
+        }
+
+        return result;
+    }
+
 };
